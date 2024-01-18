@@ -1,0 +1,34 @@
+version: "3.3"
+services:
+  db:
+    image: postgres:13.3
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: "anomaly"
+      POSTGRES_USER: "rahul"
+      POSTGRES_PASSWORD: "pass"
+    ports:
+      - "5432:5432"
+    volumes:
+      - type: "bind"
+        source: "/Users/csc/Library/CloudStorage/OneDrive-q²methodsGmbH&Co.KG/rstudio/TransnetBW/PLANKTON/WebApp/Example/DB2RStudio/postgres"
+        # source: "/Users/csc/Library/CloudStorage/OneDrive-q²methodsGmbH&Co.KG/Docker/DB/postgres"
+        # source: "/Users/csc/Library/CloudStorage/OneDrive\ -\ q²methods\ GmbH\ \\&\ Co.\ KG/Docker/DB/postgres"
+        # source: "$PWD"
+
+        target: "/var/lib/postgresql/data"
+  rstudio:
+    # image: rocker/rstudio
+    image: rstudio_db
+    ports:
+      - "8787:8787"
+      - "3838:3838"
+    environment:
+      DISABLE_AUTH: "true"
+      ROOT: "true"
+    volumes:
+      - type: "bind"
+        source: "$HOME/Library/CloudStorage/OneDrive-q²methodsGmbH&Co.KG/rstudio"
+        target: "/home/rstudio"
+    depends_on:
+      - "db"
